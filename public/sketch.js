@@ -17,3 +17,11 @@ blueslider.oninput = (e) => {
   socket.emit("postblue", data);
   console.log(data);
 };
+
+sample.onclick = (e) => {
+  if (blue == 255) {
+    socket.emit("postblue", 0);
+  } else {
+    socket.emit("postblue", 255);
+  }
+};
