@@ -26,5 +26,6 @@ sample.onclick = (e) => {
     socket.emit("postblue", 255);
     blue = 255;
   }
+  blueslider.value = blue;
   sample.style.backgroundColor = `rgb(${255 - blue}, ${255 - blue}, ${255})`;
 };
