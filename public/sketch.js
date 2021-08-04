@@ -26,5 +26,5 @@ sample.onclick = (e) => {
     socket.emit("postblue", 255);
     blue = 255;
   }
-  sample.style.backgroundColor = `rgb(${255 - data}, ${255 - data}, ${255})`;
+  sample.style.backgroundColor = `rgb(${255 - blue}, ${255 - blue}, ${255})`;
 };
