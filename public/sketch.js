@@ -21,7 +21,9 @@ blueslider.oninput = (e) => {
 sample.onclick = (e) => {
   if (blue == 255) {
     socket.emit("postblue", 0);
+    blue = 0;
   } else {
     socket.emit("postblue", 255);
+    blue = 255;
   }
 };
