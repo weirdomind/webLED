@@ -3,7 +3,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 const chalk = require("chalk");
 const socket = require("socket.io");
-const link = require("./terminallink");
 
 const PORT = process.env.PORT || 8000;
 const ISDEV = process.env.NODE_ENV !== "production";
