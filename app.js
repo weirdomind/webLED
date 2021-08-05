@@ -9,6 +9,7 @@ const ISDEV = process.env.NODE_ENV !== "production";
 const app = express();
 
 let blue = 0;
+let isBoardReady = false;
 
 app.use(cors());
 app.use(morgan("tiny"));
@@ -29,6 +30,9 @@ const io = socket(server);
 
 io.sockets.on("connection", (soc) => {
   soc.emit("blue", blue);
+  if (isBoardReady) {
+    soc.emit("boardready");
+  }
   console.log(
     chalk.greenBright(
       `___________________________________\n|joined-------${soc.id}|\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n`
@@ -52,5 +56,9 @@ io.sockets.on("connection", (soc) => {
         chalk.whiteBright(`<<-  ${soc.id}`)
     );
     soc.broadcast.emit("blue", blue);
+  });
+  soc.on("boardready", () => {
+    soc.broadcast.emit("boardready");
+    isBoardReady = true;
   });
 });

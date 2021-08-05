@@ -2,12 +2,18 @@ const socket = io.connect();
 const blueslider = document.getElementById("blueslider");
 const sample = document.getElementById("sample");
 let blue = 0;
+blueslider.disabled = true;
 
 socket.on("blue", (data) => {
   blue = data;
   blueslider.value = data;
   sample.style.backgroundColor = `rgb(${255 - data}, ${255 - data}, ${255})`;
   console.log("got blue", data);
+});
+
+socket.on("boardready", () => {
+  console.log("board ready");
+  blueslider.disabled = false;
 });
 
 blueslider.oninput = (e) => {
