@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8000;
 const ISDEV = process.env.NODE_ENV !== "production";
 const app = express();
 
-let blue = 0;
+let color = "#000000";
 let isBoardReady = false;
 
 app.use(cors());
@@ -29,10 +29,7 @@ const server = app.listen(PORT, () => {
 const io = socket(server);
 
 io.sockets.on("connection", (soc) => {
-  soc.emit("blue", blue);
-  if (isBoardReady) {
-    soc.emit("boardready");
-  }
+  soc.broadcast.emit("boardstate", isBoardReady);
   console.log(
     chalk.greenBright(
       `___________________________________\n|joined-------${soc.id}|\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n`
@@ -45,20 +42,14 @@ io.sockets.on("connection", (soc) => {
       )
     );
   });
-  soc.on("getblue", () => {
-    soc.emit("blue", blue);
+  // custom events
+
+  soc.on("forward", ({ eventname, data }) => {
+    soc.broadcast.emit(eventname, data);
   });
-  soc.on("postblue", (data) => {
-    blue = data;
-    console.log(
-      chalk.bgRgb(0, 0, blue)(blue),
-      (String(data).length == 1 ? "  " : String(data).length == 2 ? " " : "") +
-        chalk.whiteBright(`<<-  ${soc.id}`)
-    );
-    soc.broadcast.emit("blue", blue);
-  });
-  soc.on("boardready", () => {
-    soc.broadcast.emit("boardready");
-    isBoardReady = true;
+
+  soc.on("boardstate", (data) => {
+    isBoardReady = data;
+    soc.broadcast.emit("boardstate", data);
   });
 });

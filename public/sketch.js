@@ -1,37 +1,22 @@
 const socket = io.connect();
-const blueslider = document.getElementById("blueslider");
-const sample = document.getElementById("sample");
-let blue = 0;
-blueslider.disabled = true;
+const colorinp = document.getElementById("colorinp");
+colorinp.disabled = true;
 
-socket.on("blue", (data) => {
-  blue = data;
-  blueslider.value = data;
-  sample.style.backgroundColor = `rgb(${255 - data}, ${255 - data}, ${255})`;
-  console.log("got blue", data);
-});
-
-socket.on("boardready", () => {
-  console.log("board ready");
-  blueslider.disabled = false;
-});
-
-blueslider.oninput = (e) => {
-  const data = e.target.value;
-  blue = data;
-  sample.style.backgroundColor = `rgb(${255 - data}, ${255 - data}, ${255})`;
-  socket.emit("postblue", data);
+socket.on("boardstate", (data) => {
+  colorinp.disabled = !data;
   console.log(data);
+});
+
+colorinp.oninput = (e) => {
+  socket.emit("forward", { eventname: "postcolor", data: e.target.value });
+  console.log(e.target.value);
 };
 
-sample.onclick = (e) => {
-  if (blue == 255) {
-    socket.emit("postblue", 0);
-    blue = 0;
-  } else {
-    socket.emit("postblue", 255);
-    blue = 255;
-  }
-  blueslider.value = blue;
-  sample.style.backgroundColor = `rgb(${255 - blue}, ${255 - blue}, ${255})`;
-};
+function rgb2hex(rgb) {
+  rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
+function hex(x) {
+  return isNaN(x) ? "00" : hexDigits[(x - (x % 16)) / 16] + hexDigits[x % 16];
+}

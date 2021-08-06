@@ -15,18 +15,8 @@
     ></script>
     <title>webLED</title>
   </head>
-  <body
-    class="p-10 w-screen h-screen flex flex-col justify-around items-center"
-  >
-    <input
-      class="w-full"
-      type="range"
-      min="0"
-      max="255"
-      value="0"
-      id="blueslider"
-    />
-    <div id="sample" class="shadow-lg w-1/2 h-1/2 rounded-full border-4"></div>
+  <body class="p-10 w-screen h-screen">
+    <input class="w-full h-1/2" type="color" id="colorinp" />
     <script src="sketch.js"></script>
   </body>
 </html>
