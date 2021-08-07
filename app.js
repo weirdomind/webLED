@@ -29,12 +29,13 @@ const server = app.listen(PORT, () => {
 const io = socket(server);
 
 io.sockets.on("connection", (soc) => {
-  soc.broadcast.emit("boardstate", isBoardReady);
+  soc.emit("boardstate", isBoardReady);
   console.log(
     chalk.greenBright(
       `___________________________________\n|joined-------${soc.id}|\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n`
     )
   );
+  console.log("isBoardReady:", isBoardReady);
   soc.on("disconnect", () => {
     console.log(
       chalk.redBright(

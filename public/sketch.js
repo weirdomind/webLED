@@ -1,10 +1,9 @@
 const socket = io.connect();
 const colorinp = document.getElementById("colorinp");
-colorinp.disabled = true;
 
 socket.on("boardstate", (data) => {
   colorinp.disabled = !data;
-  console.log(data);
+  console.log("boardstate", data);
 });
 
 colorinp.oninput = (e) => {
